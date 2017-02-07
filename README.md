@@ -1,5 +1,5 @@
 # CS50
-Introduction to Computer Science exercises - CS50
+Introduction to Computer Science exercises - CS50 (http://cs50.edx.org)
 
 This is a repository for projects delivered as part of CS50x delivered by Harvard University.
 
