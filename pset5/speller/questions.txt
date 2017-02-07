@@ -1,0 +1,59 @@
+0. What is pneumonoultramicroscopicsilicovolcanoconiosis?
+A: According to Merriam-Webster's Medical Dictionary, pneumonoultramicroscopicsilicovolcanoconiosis is a
+   pneumoconiosis caused by inhalation of very fine silicate or quartz dust.
+
+1. According to its man page, what does getrusage do?
+A: Returns resource usage measures.
+
+2. Per that same man page, how many members are in a variable of type struct rusage?
+A: type struct rusage contains 16 members. 
+
+3. Why do you think we pass before and after by reference (instead of by value) to calculate,
+   even though we’re not changing their contents?
+A: Passing in by reference means we're not creating copies of the struct as would happen if we passed by value.
+   This is an efficiency in utilized memory at compile time\run time. We can reuse the pointer to the struct as we 
+   don't need to create copies each time the struct is called or used as at the time of calling we only care 
+   about what is currently stored or about to be stored in the struct and don't need to create a copy of it.
+
+4. Explain as precisely as possible, in a paragraph or more, how main goes about reading words from a file.
+   In other words, convince us that you indeed understand how that function’s for loop works.
+A: The for loop condition utilizes 'fgetc' to read a character at a time until EOF is reached. For each character
+   read it validates to make sure it is an alphabetical character or an apostrophe. If it is then it appends it
+   to an array(word) and increments the array index(index). 
+    
+   If the word array is greater than LENGTH then we don't support it, consume it, prepare for the next word and
+   enter the next iteration of the for loop.
+    
+   If the character read is a digit then we ignore words with digits in them so we consume the remainder
+   of that string and then prepare for a new word and enter the next iteration of the for loop.
+    
+   If we pass the first three validations then we must have found a whole word. We terminate the word with 
+   the end of string character(\0) and increment the words counter. Then we pass it through the check function 
+   to determine if it is spelled correctly and obtain the rusage values before and after.
+    
+   If misspelled we print out the mispelled word and increment the misspelled counter. Then we prepare for the 
+   next word and go through the next iteration of the for loop.
+
+5. Why do you think we used fgetc to read each word’s characters one at a time rather than use fscanf with a 
+   format string like "%s" to read whole words at a time? Put another way, what problems might arise by 
+   relying on fscanf alone?
+A: By using fgetc we are allowing validation on each character as it is read. This allows us to implement the
+   character type validation for ignoring words that breach LENGTH or words that contain unsupported characters.
+    
+   If we were reliant on fscanf then we would read in a whole word and then have to loop through the words
+   separately to determine if it breached any of our rules and to also count the length of the word.
+    
+   There is also an issue with string formatters for fscanf. To read a digit we would need to use %d otherwise
+   we would have a problem handling those with %s. There is the option to use %c for a character at a time but
+   fgetc returns the actual character which you can store in a variable. fscanf expects you to supply a variable
+   to store the return within its function call, this makes it more complex(impossible?) to use the variable 
+   in for loop conditions as speller.c does with fgetc.
+
+6. Why do you think we declared the parameters for check and load as const (which means "constant")?
+A: Because we don't what the function be able to modify the pointer or the data the pointer is pointing at. Thus
+   we are passing in a constant that should not change.
+   
+   For example: check on each iteration should be checking a new word. Thus the pointer to the word has changed
+   but we don't expect to ever change the data or pointer on each iteration. Likewise with load we give the 
+   option for the pointer to change to a different dictionary from the default constant of DICTIONARY but when
+   called we don't expect the pointer or data stored at the address to be changed.

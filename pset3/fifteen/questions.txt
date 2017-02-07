@@ -1,0 +1,9 @@
+questions.txt
+
+Computer Science 50
+Problem Set 3
+
+0. The other dimensions allowed by the game framework are 3 x 3, 5 x 5, 6 x 6, 7 x 7, 8 x 8, 9 x 9.
+1. The game's board is represented by a two-dimensional array data structure. (int board[DIM_MIN][DIM_MAX]).
+2. The function greet() is called to greet the player at the game's start.
+3. The functions I apparently need to implement are init(), draw(), move() and won().
