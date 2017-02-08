@@ -13,6 +13,7 @@ typedef struct node
 }
 node;
 
+// TODO - document
 int main(void)
 {
     
