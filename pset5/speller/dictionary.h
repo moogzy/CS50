@@ -11,6 +11,17 @@
 // (e.g., pneumonoultramicroscopicsilicovolcanoconiosis)
 #define LENGTH 45
 
+/*
+ * Use struct to store char array and next node
+ * Singly linked list nodes for storing in hashtable.
+ */
+typedef struct node
+{
+    char word[LENGTH + 1];
+    struct node *next;
+}
+node;
+
 /**
  * Returns true if word is in dictionary else false.
  */

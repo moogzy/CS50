@@ -9,10 +9,10 @@
 #include <string.h>
 
 #include "dictionary.h"
-#include "datatypes.h"
 
 // 10000 makes the djb2 hash function effective(0.01 - 0.04 check time on avg).
-// Large texts (eg shakespeare.txt will take a bit longer but still be considered fast.)
+// Large texts (eg shakespeare.txt will take a bit longer but still be 
+// considered fast.)
 #define INDEXSIZE 10000
 
 // Initialize array of node structs based on INDEXSIZE.
