@@ -17,14 +17,20 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-typedef uint8_t BYTE; // rename to BYTE for clarity.
+// rename to BYTE for clarity.
+
+typedef uint8_t BYTE;
 
 int main(int argc, char *argv[])
 {
-    unsigned char *buffer; // Initialize buffer ptr for later malloc.
-    char *newimgfile;      // Initialize filename ptr for later malloc.
-    BYTE block [512];      // Define array for block size on card image.
-    int images_found = 0;  // Initialize count for images found.
+    // Initialize buffer ptr for later malloc.
+    unsigned char *buffer;
+    // Initialize filename ptr for later malloc.
+    char *newimgfile;
+    // Define array for block size on card image.
+    BYTE block [512];
+    // Initialize count for images found.
+    int images_found = 0;
     
     /* 
      Enforce correcct usage.
@@ -38,7 +44,9 @@ int main(int argc, char *argv[])
         return 1;
     }
     
-    char *srcimgfile = argv[1]; // Define img ptr - second cli argument provided should be the name of image file.
+    // Define img ptr - second cli argument provided should be the 
+    // name of image file.
+    char *srcimgfile = argv[1];
     
     // Attempt to open the source image with read access.
     FILE *srcimgptr = fopen(srcimgfile, "r"); 
@@ -53,23 +61,28 @@ int main(int argc, char *argv[])
         return 2;
     }
     
-    FILE *newimgptr = NULL; // Define temporary pointer for later loop validation.
-    newimgfile = (char *) malloc(sizeof(BYTE) * 8); // Pointee for filename, allocate heap memory dynamically (8B).
-    buffer = (unsigned char *) malloc(sizeof(block)); // Pointee for buffer, allocate heap memory dynamically(512B).
+    // Define temporary pointer for later loop validation.
+    FILE *newimgptr = NULL;
+    // Pointee for filename, allocate heap memory dynamically (8B).
+    newimgfile = (char *) malloc(sizeof(BYTE) * 8);
+    // Pointee for buffer, allocate heap memory dynamically(512B).
+    buffer = (unsigned char *) malloc(sizeof(block));
     
     
     /*
       Now the real fun starts!
       
       - Read into buffer, 1 * 512 bytes (Total 512 bytes) from source image.
-      - Validate that we're reading in 512 at a time. (Remember we've allocated 512 from the heap to block).
-        This protects from the last block of the src file being < 512 as it will copy as much as it 
-        can into buffer and then the remaining memory space will be empty(JPGEs don't mind this and 
-        are still correct and readable even with padded all-zeros).
-      - Look for the start of a JPEG file (Hex = 0xffd8ff, Decimal = 255216255), when found
-        create a new jpg file to write the image data to.
-      - If the buffer read in does not contain the start of a new jpg image then this data belongs
-        to the previously opened image so copy it there.
+      - Validate that we're reading in 512 at a time. 
+        (Remember we've allocated 512 from the heap to block).
+        This protects from the last block of the src file being < 512 as it 
+        will copy as much as it can into buffer and then the remaining memory
+        space will be empty(JPGEs don't mind this and are still correct and 
+        readable even with padded all-zeros).
+      - Look for the start of a JPEG file (Hex = 0xffd8ff, Decimal = 255216255)
+        when found create a new jpg file to write the image data to.
+      - If the buffer read in does not contain the start of a new jpg image then
+        this data belongs to the previously opened image so copy it there.
       - Rinse and Repeat till EOF.
     */
     while(fread(buffer, 1, sizeof(block), srcimgptr) == sizeof(block))
@@ -77,7 +90,8 @@ int main(int argc, char *argv[])
         // Bitwise AND operation to look at the first four bytes of a JPG file
         //
         // 0,1,2 = 0xff, 0xd8, 0xff repectively
-        // 3 = can be between 0xe0 - 0xef (The fourth bytes first four bits are always 1110)
+        // 3 = can be between 0xe0 - 0xef (The fourth bytes first four bits are
+        // always 1110)
         if (buffer[0] == 0xff && 
            buffer[1] == 0xd8 && 
            buffer[2] == 0xff && 
@@ -99,7 +113,8 @@ int main(int argc, char *argv[])
             sprintf(newimgfile, "%03i.jpg", images_found);
             
             /* 
-              Open the new jpg image file with write so we can store the recovered image data.
+              Open the new jpg image file with write so we can store the
+              recovered image data.
             
                If we can't open the file with write access then return an error.
             */
@@ -121,8 +136,8 @@ int main(int argc, char *argv[])
               The data read into buffer does not hold a new jpg image this means
                we the data belongs to the previously opened image.
             
-               Valid we have an opened image, if yes then write the buffer to the
-               open image file.
+               Valid we have an opened image, if yes then write the buffer to 
+               the open image file.
             */
             if (newimgptr != NULL)
             {
@@ -140,6 +155,7 @@ int main(int argc, char *argv[])
     fclose(srcimgptr);
     fclose(newimgptr);
 
-    // If we've got to this point successfully then return the expected exit code.
+    // If we've got to this point successfully then return the expected 
+    // exit code.
     return 0;
 }
